@@ -1,6 +1,16 @@
+"use client"
 import { AreaChartStacked } from "./charts/area-chart-stacked";
 import { BarChartMultiple } from "./charts/bar-chart-multiple";
 import { LineChartInteractive } from "./charts/line-chart-interactive";
+import { BarChart, Moon, Sun } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { useTheme } from "next-themes"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { Transaction } from "@/lib/utils";
 
 // These function are moved to utils
@@ -138,8 +148,29 @@ const data: Transaction[] = [
   }
 ];
 export default function Home() {
+  const { setTheme } = useTheme()
   return (
-    <div className="p-8 flex flex-col gap-5">
+    <div className=""> <header className="flex h-14 bg-black justify-end items-center bg-background px-4 lg:px-6"><DropdownMenu>
+    <DropdownMenuTrigger asChild>
+      <Button variant="outline" size="icon">
+        <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+        <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+        <span className="sr-only">Toggle theme</span>
+      </Button>
+    </DropdownMenuTrigger>
+    <DropdownMenuContent align="end">
+      <DropdownMenuItem onClick={() => setTheme("light")}>
+        Light
+      </DropdownMenuItem>
+      <DropdownMenuItem onClick={() => setTheme("dark")}>
+        Dark
+      </DropdownMenuItem>
+      <DropdownMenuItem onClick={() => setTheme("system")}>
+        System
+      </DropdownMenuItem>
+    </DropdownMenuContent>
+  </DropdownMenu> 
+  </header>
       <h2 className="text-2xl">Charts</h2>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8 ">
         <AreaChartStacked data={data} />
