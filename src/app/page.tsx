@@ -36,20 +36,20 @@ import { Label } from "@/components/ui/label"
 
 
 // my data
-export const dummyData = {
-  "data": [
-    {
+const dummyData =  [
+    { "transactionID" :"1",
       "date": "2023-09-06",
-      "description": "Square Payments 12345234",
-      "amount": "£11,111.00",
+      "description": "Square Payments 9866767635234",
+      "amount": "£51,678.00",
       "category": "Payments Processor",
       "subCategory": "Square Limited",
       "merchant": "Square Limited",
-      "catStatus": "Automatic"
+      "catStatus": "Manual"
     },
     {
+      "transactionID" :"2",
       "date": "2023-09-07",
-      "description": "Square Payments 12345234",
+      "description": "Square Payments 1234435435234",
       "amount": "£11,111.00",
       "category": "Payments Processor",
       "subCategory": "Square Limited",
@@ -57,34 +57,37 @@ export const dummyData = {
       "catStatus": "Automatic"
     },
     {
+      "transactionID" :"3",
       "date": "2023-09-08",
-      "description": "Square Payments 12345234",
-      "amount": "£11,111.00",
+      "description": "Square Payments 1234345335234",
+      "amount": "£14,555.00",
       "category": "Payments Processor",
       "subCategory": "Square Limited",
       "merchant": "Square Limited",
       "catStatus": "Automatic"
     },
     {
+      "transactionID" :"4",
       "date": "2023-09-09",
-      "description": "Square Payments 12345234",
-      "amount": "£11,111.00",
+      "description": "Square Payments 6666645234",
+      "amount": "£41,333.00",
       "category": "Payments Processor",
       "subCategory": "Square Limited",
       "merchant": "Square Limited",
-      "catStatus": "Automatic"
+      "catStatus": "Manual"
     },
     {
+      "transactionID" :"5",
       "date": "2023-09-10",
-      "description": "Square Payments 12345234",
-      "amount": "£11,111.00",
+      "description": "Square Payments 88885234",
+      "amount": "£17.00",
       "category": "Payments Processor",
       "subCategory": "Square Limited",
       "merchant": "Square Limited",
       "catStatus": "Automatic"
     }
   ]
-};
+;
 export const dummyDatanot = {
   data: {
     events: [
@@ -500,24 +503,32 @@ export default function Home() {
     </DropdownMenuContent>
   </DropdownMenu> 
 </div>
-<h1 className="flex justify-center items-center align-middle text-2xl">365 Finance</h1>
+<h1 className="flex justify-center  align-middle text-2xl">365 Finance</h1>
   </header>
-  <div className="container justify-center p-20 ">
+  <div className="container p-20 ">
     
       <div className="space-y-1">
         <h3 className="text-sm font-medium leading-none">Filter By Type</h3>
       </div>
       <Separator className="my-4" />
-      <div className="p-10">     <ToggleGroup type="single">
-  <ToggleGroupItem value="Credit">Credit Only</ToggleGroupItem>
+      <div className="grid justify-items-start  p-10">     
+        <div>
+          
+          <ToggleGroup type="single">
+  <ToggleGroupItem value="Credits">Credits Only</ToggleGroupItem>
   <ToggleGroupItem value="Debits">Debits Only</ToggleGroupItem>
-  <ToggleGroupItem value="All">All Transactions</ToggleGroupItem>
-</ToggleGroup>
-<ToggleGroup type="single">
+  <ToggleGroupItem value="Transactions">All Transactions</ToggleGroupItem>
+          </ToggleGroup>
+         
+        </div>
+        <div>
+        <ToggleGroup type="single">
   <ToggleGroupItem value="Categorised">Categorised</ToggleGroupItem>
   <ToggleGroupItem value="Uncategorised">Uncategorised</ToggleGroupItem>
   <ToggleGroupItem value="Transactions">All Transactions</ToggleGroupItem>
-</ToggleGroup>
+        </ToggleGroup>
+        </div>
+
       </div>
       <div>
       <div className="space-y-1">
@@ -526,7 +537,7 @@ export default function Home() {
       <Separator className="my-4" />
       
     </div>
-      <div className="flex items-center gap-3.5 grid-cols-3 p-10">
+      <div className="flex items-center gap-3.5  p-10">
           <div className="p-4"> <Label htmlFor="">Contains</Label><Input type="" id="Contains" placeholder="Sqauare" /></div>
           <div className="p-4"> <Label htmlFor="">Do Not Contain</Label><Input type="" id="NotContain" placeholder="Canada Sqauare" /></div>
           <div className="p-4"> <Label htmlFor="">Start with</Label><Input type="" id="Startwith" placeholder="" /></div>
@@ -538,7 +549,7 @@ export default function Home() {
       </div>
       <Separator className="my-4" />
 
-      <div className="p-10">     
+      <div className="grid justify-items-start  p-10">     
         <ToggleGroup type="single">
   <ToggleGroupItem value="FDMS">FDMS</ToggleGroupItem>
   <ToggleGroupItem value="Stripe">Stripe</ToggleGroupItem>
@@ -551,7 +562,7 @@ export default function Home() {
         <h3 className="text-sm font-medium leading-none">Filter By Month</h3>
       </div>
       <Separator className="my-4" />
-      <div className="p-10"> 
+      <div className="grid justify-items-start  p-10"> 
       <ToggleGroup type="single">
   <ToggleGroupItem value="a">Sep-24</ToggleGroupItem>
   <ToggleGroupItem value="b">Aug-24</ToggleGroupItem>
@@ -587,18 +598,21 @@ export default function Home() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {invoices.map((invoice) => (
-          <TableRow key={invoice.invoice}>
-            <TableCell className="font-medium">{invoice.invoice}</TableCell>
-            <TableCell>{invoice.paymentStatus}</TableCell>
-            <TableCell>{invoice.paymentMethod}</TableCell>
-            <TableCell className="text-right">{invoice.totalAmount}</TableCell>
+        {dummyData.map((dummyData) => (
+          <TableRow key={dummyData.transactionID}>
+            <TableCell className="font-medium"></TableCell>
+            <TableCell>{dummyData.date}</TableCell>
+            <TableCell>{dummyData.amount}</TableCell>
+            <TableCell>{dummyData.category}</TableCell>
+            <TableCell>{dummyData.subCategory}</TableCell>
+            <TableCell>{dummyData.merchant}</TableCell>
+            <TableCell className="text-right">{dummyData.catStatus}</TableCell>
           </TableRow>
         ))}
       </TableBody>
       <TableFooter>
         <TableRow>
-          <TableCell colSpan={3}>Total</TableCell>
+          <TableCell colSpan={2}>Total</TableCell>
           <TableCell className="text-right">$2,500.00</TableCell>
         </TableRow>
       </TableFooter>
