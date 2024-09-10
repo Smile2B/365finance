@@ -32,9 +32,6 @@ import {
 } from "@/components/ui/toggle-group"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-
-
- 
 import * as React from "react"
 import {
   ColumnDef,
@@ -49,8 +46,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table"
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
- 
-
 import { Checkbox } from "@/components/ui/checkbox"
 
 const columns: ColumnDef<Payment>[] = [
@@ -77,26 +72,26 @@ const columns: ColumnDef<Payment>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "date",
+    header: "Date",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
+      <div className="capitalize">{row.getValue("date")}</div>
     ),
   },
   {
-    accessorKey: "email",
+    accessorKey: "description",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Email
+          Description
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    cell: ({ row }) => <div className="lowercase">{row.getValue("description")}</div>,
   },
   {
     accessorKey: "amount",
@@ -107,13 +102,73 @@ const columns: ColumnDef<Payment>[] = [
       // Format the amount as a dollar amount
       const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
-        currency: "USD",
+        currency: "GBP",
       }).format(amount)
  
       return <div className="text-right font-medium">{formatted}</div>
     },
+  },{
+    accessorKey: "category",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Category
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => <div className="lowercase">{row.getValue("category")}</div>,
   },
   {
+    accessorKey: "subCategory",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Sub Category
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => <div className="lowercase">{row.getValue("subCategory")}</div>,
+  },
+  {
+    accessorKey: "merchant",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Merchant
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => <div className="lowercase">{row.getValue("merchant")}</div>,
+  },
+  {
+    accessorKey: "catStatus",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Cat Status
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => <div className="lowercase">{row.getValue("catStatus")}</div>,
+  },
+  {
+    
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
@@ -132,57 +187,127 @@ const columns: ColumnDef<Payment>[] = [
             <DropdownMenuItem
               onClick={() => navigator.clipboard.writeText(payment.id)}
             >
-              Copy payment ID
+              Copy customer ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem>View customer info</DropdownMenuItem>
+            <DropdownMenuItem>Edit Categorisation</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
     },
   },
 ]
- 
-const data: Payment[] = [
-  {
-    id: "m5gr84i9",
-    amount: 316,
-    status: "success",
-    email: "ken99@yahoo.com",
-  },
-  {
-    id: "3u1reuv4",
-    amount: 242,
-    status: "success",
-    email: "Abe45@gmail.com",
-  },
-  {
-    id: "derv1ws0",
-    amount: 837,
-    status: "processing",
-    email: "Monserrat44@gmail.com",
-  },
-  {
-    id: "5kma53ae",
-    amount: 874,
-    status: "success",
-    email: "Silas22@gmail.com",
-  },
-  {
-    id: "bhqecj4p",
-    amount: 721,
-    status: "failed",
-    email: "carmella@hotmail.com",
-  },
-]
- 
+  
 export type Payment = {
   id: string
   amount: number
-  status: "pending" | "processing" | "success" | "failed"
+  type: "Credits Only" | "Debits Only" 
+   
   email: string
 }
+const data: Payment[] = [
+  
+  { "transactionID" :"1",
+    "date": "2023-09-06",
+    "description": "Square Payments 9866767635234",
+    "amount": "51678.00",
+    "category": "Payments Processor",
+    "subCategory": "Square Limited",
+    "merchant": "Square Limited",
+    "catStatus": "Manual",
+       "type" : "Credits Only"
+  },
+  {
+    "transactionID" :"2",
+    "date": "2023-09-07",
+    "description": "Square Payments TTTTT",
+    "amount": "11111.00",
+    "category": "Payments Processor",
+    "subCategory": "Square Limited",
+    "merchant": "Square Limited",
+    "catStatus": "Automatic",
+     "type" : "Debits Only"
+  },
+  {
+    "transactionID" :"3",
+    "date": "2023-09-08",
+    "description": "Square Payments BBBBDDDD",
+    "amount": "14555.00",
+    "category": "Payments Processor",
+    "subCategory": "Square Limited",
+    "merchant": "Square Limited",
+    "catStatus": "Automatic",
+     "type" : "Debits Only"
+  },
+  {
+    "transactionID" :"4",
+    "date": "2023-09-09",
+    "description": "Square Payments AAA",
+    "amount": "41333.00",
+    "category": "Square",
+    "subCategory": "Square Limited",
+    "merchant": "Square Limited",
+    "catStatus": "Manual",
+     "type" : "Credits Only"
+  },
+  {
+    "transactionID" :"5",
+    "date": "2023-09-10",
+    "description": "Square Payments BBB",
+    "amount": "17.00",
+    "category": "Barclys Processor",
+    "subCategory": "Square Limited",
+    "merchant": "Square Limited",
+    "catStatus": "Automatic",
+     "type" : "Debits Only"
+  },
+  {
+    "transactionID" :"6",
+    "date": "2023-09-09",
+    "description": "Square Payments SSS",
+    "amount": "41333.00",
+    "category": "Square",
+    "subCategory": "Square Limited",
+    "merchant": "Square Limited",
+    "catStatus": "Manual",
+     "type" : "Credits Only"
+  },
+  {
+    "transactionID" :"7",
+    "date": "2023-09-10",
+    "description": "Square Payments 4332221",
+    "amount": "17.00",
+    "category": "Barclys Processor",
+    "subCategory": "Square Limited",
+    "merchant": "Square Limited",
+    "catStatus": "Automatic",
+     "type" : "Credits Only"
+  },
+  {
+    "transactionID" :"8",
+    "date": "2023-09-09",
+    "description": "Square Payments 542222",
+    "amount": "41333.00",
+    "category": "Square",
+    "subCategory": "Square Limited",
+    "merchant": "Square Limited",
+    "catStatus": "Manual",
+     "type" : "Credits Only"
+  },
+  {
+    "transactionID" :"9",
+    "date": "2023-09-10",
+    "description": "Square Payments 988888",
+    "amount": "17.00",
+    "category": "Barclys Processor",
+    "subCategory": "Square Limited",
+    "merchant": "Square Limited",
+    "catStatus": "Automatic",
+     "type" : "Credits Only"
+  }
+]
+
 
 // my data
 const dummyData =  [
@@ -194,6 +319,7 @@ const dummyData =  [
       "subCategory": "Square Limited",
       "merchant": "Square Limited",
       "catStatus": "Manual"
+   
     },
     {
       "transactionID" :"2",
@@ -236,214 +362,8 @@ const dummyData =  [
       "catStatus": "Automatic"
     }
   ]
-;
-export const dummyDatanot = {
-  data: {
-    events: [
-      {
-        month: {
-          year: 2024,
-          month: 8
-        },
-        events: [
-          {
-            date: "2024-08-19",
-            type: "AccountHolder Match",
-            info: "Acc: 10146978 SortCode: 090222"
-          },
-          {
-            date: "2024-08-09",
-            type: "Financial commitment",
-            amount: 149.95
-          },
-          {
-            date: "2024-08-05",
-            type: "Returned payment",
-            amount: 5000.00,
-            info: "Reason: Insufficient funds"
-          }
-        ]
-      },
-      {
-        month: {
-          year: 2024,
-          month: 7
-        },
-        events: [
-          {
-            date: "2024-07-31",
-            type: "Significant transaction",
-            amount: 21824.76
-          },
-          {
-            date: "2024-07-16",
-            type: "Returned payment",
-            amount: 3594.90
-          },
-          {
-            date: "2024-07-10",
-            type: "Subscription payment",
-            amount: 29.99,
-            info: "Streaming Service"
-          }
-        ]
-      },
-      {
-        month: {
-          year: 2024,
-          month: 6
-        },
-        events: [
-          {
-            date: "2024-06-25",
-            type: "Utility bill payment",
-            amount: 150.65,
-            info: "Water bill"
-          },
-          {
-            date: "2024-06-15",
-            type: "Utility bill payment",
-            amount: 200.75,
-            info: "Electricity bill"
-          },
-          {
-            date: "2024-06-10",
-            type: "Mortgage payment",
-            amount: 1800.00,
-            info: "Monthly mortgage payment"
-          }
-        ]
-      },
-      {
-        month: {
-          year: 2024,
-          month: 5
-        },
-        events: [
-          {
-            date: "2024-05-28",
-            type: "Loan repayment",
-            amount: 500.00,
-            info: "Student loan repayment"
-          },
-          {
-            date: "2024-05-20",
-            type: "Grocery purchase",
-            amount: 200.45,
-            info: "Supermarket - Weekly groceries"
-          },
-          {
-            date: "2024-05-05",
-            type: "Insurance payment",
-            amount: 350.00,
-            info: "Car insurance"
-          }
-        ]
-      },
-      {
-        month: {
-          year: 2024,
-          month: 4
-        },
-        events: [
-          {
-            date: "2024-04-22",
-            type: "Medical expense",
-            amount: 120.00,
-            info: "Prescription medicine"
-          },
-          {
-            date: "2024-04-15",
-            type: "Entertainment expense",
-            amount: 75.00,
-            info: "Concert tickets"
-          },
-          {
-            date: "2024-04-10",
-            type: "Tax payment",
-            amount: 500.00,
-            info: "Quarterly tax payment"
-          }
-        ]
-      },
-      {
-        month: {
-          year: 2024,
-          month: 3
-        },
-        events: [
-          {
-            date: "2024-03-30",
-            type: "Significant purchase",
-            amount: 3500.00,
-            info: "Laptop purchase"
-          },
-          {
-            date: "2024-03-20",
-            type: "Dining expense",
-            amount: 125.50,
-            info: "Restaurant dinner"
-          },
-          {
-            date: "2024-03-15",
-            type: "Fuel purchase",
-            amount: 60.00,
-            info: "Gas station - Fuel"
-          }
-        ]
-      }
-    ],
-    financialServices: [
-      {
-        vendor: "Federal Capital",
-        category: "Loans",
-        debit: {
-          total: 53699.40,
-          monthlyAvg: 4474.95,
-          lastTransaction: "2024-08-16"
-        }
-      },
-      {
-        vendor: "American Express",
-        category: "Credit Cards",
-        credit: {
-          total: 28963.17,
-          monthlyAvg: 2413.60,
-          lastTransaction: "2024-08-19"
-        }
-      },
-      {
-        vendor: "Visa",
-        category: "Credit Cards",
-        debit: {
-          total: 5000.00,
-          monthlyAvg: 500.00,
-          lastTransaction: "2024-08-05"
-        }
-      }
-    ],
-    regularOutgoings: [
-      {
-        category: "Misc Payments",
-        total: 117309.67,
-        monthlyAvg: 9775.81,
-        lastTransaction: "2024-08-12"
-      },
-      {
-        category: "Tax",
-        total: 38500.00,
-        monthlyAvg: 3208.33,
-        lastTransaction: "2024-06-20"
-      },
-      {
-        category: "Streaming Service",
-        total: 120.00,
-        monthlyAvg: 10.00,
-        lastTransaction: "2024-07-10"
-      }
-    ]
-  }
-};
+
+
 
 
 // These function are moved to utils
@@ -713,7 +633,10 @@ export default function Home() {
       
     </div>
       <div className="flex items-center gap-3.5  p-10">
-          <div className="p-4"> <Label htmlFor="">Contains</Label><Input type="" id="Contains" placeholder="Sqauare" /></div>
+          <div className="p-4"> <Label htmlFor="">Contains</Label><Input type="" id="Contains" placeholder="Sqauare" value={(table.getColumn("description")?.getFilterValue() as string) ?? ""} 
+          onChange={(event) =>
+            table.getColumn("description")?.setFilterValue(event.target.value)
+          }/></div>
           <div className="p-4"> <Label htmlFor="">Do Not Contain</Label><Input type="" id="NotContain" placeholder="Canada Sqauare" /></div>
           <div className="p-4"> <Label htmlFor="">Start with</Label><Input type="" id="Startwith" placeholder="" /></div>
           <div className="p-4"> <Label htmlFor="">End with</Label><Input type="" id="Endwith" placeholder="" /></div>
@@ -758,48 +681,28 @@ export default function Home() {
         <h3 className="text-sm font-medium leading-none">Filtered Transactions</h3>
       </div>
       <Separator className="my-4" />
-      <div className="p-10">    
-      <Table>
-      <TableCaption>Transactions</TableCaption>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">Select</TableHead>
-          <TableHead>Date</TableHead>
-          <TableHead>Amount</TableHead>
-          <TableHead>Category</TableHead>
-          <TableHead>Sub Category</TableHead>
-          <TableHead>Merchant</TableHead>
-          <TableHead className="text-right">Cat.Status</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {dummyData.map((dummyData) => (
-          <TableRow key={dummyData.transactionID}>
-            <TableCell className="font-medium"></TableCell>
-            <TableCell>{dummyData.date}</TableCell>
-            <TableCell>{dummyData.amount}</TableCell>
-            <TableCell>{dummyData.category}</TableCell>
-            <TableCell>{dummyData.subCategory}</TableCell>
-            <TableCell>{dummyData.merchant}</TableCell>
-            <TableCell className="text-right">{dummyData.catStatus}</TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-      <TableFooter>
-        <TableRow>
-          <TableCell colSpan={2}>Total</TableCell>
-          <TableCell className="text-right">$2,500.00</TableCell>
-        </TableRow>
-      </TableFooter>
-    </Table>
-      </div>  
+
+      <Separator className="my-4" />
+
+
+
+
+
+
+
+
+
+
+
+
+
       <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          placeholder="Filter category..."
+          value={(table.getColumn("category")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
+            table.getColumn("category")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
