@@ -45,7 +45,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 const data = [
   {
     transactionID: "1",
-    date: "2023-12-06",
+    date: "2024-05-06",
     description: "Square Payments 9866767635234",
     amount: "51678.00",
     category: "Payments Processor",
@@ -143,16 +143,7 @@ const data = [
     type: "Credits Only",
   },
 ];
-const formatDate = (dateString: string) => {
-  const options = { year: "2-digit", month: "short" };
-  return new Date(dateString).toLocaleDateString("en-US", options);
-};
-const getUniqueMonths = (data) => {
-  const monthsSet = new Set(
-    data.map((item) => formatDate(item.date))
-  );
-  return Array.from(monthsSet).sort((a, b) => new Date(`01-${a}`) - new Date(`01-${b}`)); // Sort by date
-};
+
 
 const columns: ColumnDef<Payment>[] = [
   {
@@ -190,11 +181,9 @@ const columns: ColumnDef<Payment>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => {
-      const rawDate = row.getValue("date");
-      const formattedDate = formatDate(rawDate);
-      return <div className="capitalize">{formattedDate}</div>;
-    }
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue("date")}</div>
+    ),
   },
   {
     accessorKey: "description",
@@ -359,183 +348,24 @@ export type Payment = {
 
 // These function are moved to utils
 // Transaction, aggregateData, filterData
-const invoices = [
-  {
-    invoice: "INV001",
-    paymentStatus: "Paid",
-    totalAmount: "$250.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV002",
-    paymentStatus: "Pending",
-    totalAmount: "$150.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV003",
-    paymentStatus: "Unpaid",
-    totalAmount: "$350.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV004",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV005",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV006",
-    paymentStatus: "Pending",
-    totalAmount: "$200.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
-];
-const data3: Transaction[] = [
-  {
-    label: "salary",
-    note: "monthly salary",
-    category: "income",
-    type: "income",
-    amount: 850,
-    date: "2024-07-06",
-  },
-  {
-    label: "groceries",
+// Main component
+const formatDate = (dateString: string) => {
+  const options = { year: "2-digit", month: "short" };
+  return new Date(dateString).toLocaleDateString("en-UK", options);
+};
 
-    note: "weekly grocery shopping",
-    category: "food",
-    type: "expense",
-    amount: 250,
-    date: "2024-07-05",
-  },
-  {
-    label: "electricity bill",
-    note: "monthly electricity bill",
-    category: "utilities",
-    type: "expense",
-    amount: 150,
-    date: "2024-07-04",
-  },
-  {
-    label: "freelance work",
-    note: "payment for freelance project",
-    category: "income",
-    type: "income",
-    amount: 700,
-    date: "2024-07-03",
-  },
-  {
-    label: "rent",
-    note: "monthly rent payment",
-    category: "housing",
-    type: "expense",
-    amount: 900,
-    date: "2024-07-02",
-  },
-  {
-    label: "gym membership",
-    note: "monthly gym fee",
-    category: "health",
-    type: "expense",
-    amount: 120,
-    date: "2024-07-01",
-  },
-  {
-    label: "restaurant",
-    note: "dinner at a restaurant",
-    category: "food",
-    type: "expense",
-    amount: 175,
-    date: "2024-06-30",
-  },
-  {
-    label: "internet bill",
-    note: "monthly internet bill",
-    category: "utilities",
-    type: "expense",
-    amount: 140,
-    date: "2024-06-29",
-  },
-  {
-    label: "transport",
-    note: "public transport pass",
-    category: "transport",
-    type: "expense",
-    amount: 130,
-    date: "2024-06-28",
-  },
-  {
-    label: "office supplies",
-    note: "stationery items for office",
-    category: "work",
-    type: "expense",
-    amount: 120,
-    date: "2024-06-27",
-  },
-  {
-    label: "concert tickets",
-    note: "tickets for a concert",
-    category: "entertainment",
-    type: "expense",
-    amount: 300,
-    date: "2024-06-26",
-  },
-  {
-    label: "car maintenance",
-    note: "annual car servicing",
-    category: "transport",
-    type: "expense",
-    amount: 400,
-    date: "2024-06-25",
-  },
-  {
-    label: "book purchase",
-    note: "buying a new book",
-    category: "education",
-    type: "expense",
-    amount: 110,
-    date: "2024-06-24",
-  },
-  {
-    label: "movie night",
-    note: "tickets for a movie",
-    category: "entertainment",
-    type: "expense",
-    amount: 150,
-    date: "2024-06-23",
-  },
-  {
-    label: "gift",
-    note: "birthday gift for a friend",
-    category: "gifts",
-    type: "expense",
-    amount: 200,
-    date: "2024-06-22",
-  },
-  {
-    label: "gift",
-    note: "birthday gift for a friend",
-    category: "gifts",
-    type: "expense",
-    amount: 180,
-    date: "2024-06-21",
-  },
-];
+// Extract unique months and years from the data
+const getUniqueMonths = (data: typeof data) => {
+  const monthsSet = new Set(
+    data.map((item) => formatDate(item.date))
+  );
+  return Array.from(monthsSet).sort((a, b) => new Date(`01-${a}`) - new Date(`01-${b}`)); // Sort by date
+};
+  // Extract unique months and years from the data
+
+
 export default function Home() {
-  
+  const uniqueMonths = getUniqueMonths(data);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -692,21 +522,14 @@ export default function Home() {
         </div>
         <Separator className="my-4" />
         <div className="grid justify-items-start  p-10">
-          <ToggleGroup type="single">
-            <ToggleGroupItem value="a">Sep-24</ToggleGroupItem>
-            <ToggleGroupItem value="b">Aug-24</ToggleGroupItem>
-            <ToggleGroupItem value="c">Jul-24</ToggleGroupItem>
-            <ToggleGroupItem value="d">Jun-24</ToggleGroupItem>
-            <ToggleGroupItem value="f">May-24</ToggleGroupItem>
-            <ToggleGroupItem value="g">Apr-24</ToggleGroupItem>
-            <ToggleGroupItem value="h">Mar-24</ToggleGroupItem>
-            <ToggleGroupItem value="i">Feb-24</ToggleGroupItem>
-            <ToggleGroupItem value="j">Jan-24</ToggleGroupItem>
-            <ToggleGroupItem value="k">Dec-23</ToggleGroupItem>
-            <ToggleGroupItem value="l">Nov-23</ToggleGroupItem>
-            <ToggleGroupItem value="o">Oct-23</ToggleGroupItem>
-            <ToggleGroupItem value="m">All Transactions</ToggleGroupItem>
-          </ToggleGroup>
+        <ToggleGroup type="single">
+          {uniqueMonths.map((month, index) => (
+            <ToggleGroupItem key={index} value={month}>
+              {month}
+            </ToggleGroupItem>
+          ))}
+          <ToggleGroupItem value="all">All Transactions</ToggleGroupItem>
+        </ToggleGroup>
         </div>
         <div className="space-y-1">
           <h3 className="text-sm font-medium leading-none">
