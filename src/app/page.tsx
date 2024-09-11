@@ -1,8 +1,5 @@
 "use client";
-import { AreaChartStacked } from "./charts/area-chart-stacked";
-import { BarChartMultiple } from "./charts/bar-chart-multiple";
-import { LineChartInteractive } from "./charts/line-chart-interactive";
-import { BarChart, Moon, Sun } from "lucide-react";
+import {  Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
 import {
@@ -44,7 +41,118 @@ import {
 } from "@tanstack/react-table";
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useState } from "react";
+//Data in USse
+const data = [
+  {
+    transactionID: "1",
+    date: "2023-12-06",
+    description: "Square Payments 9866767635234",
+    amount: "51678.00",
+    category: "Payments Processor",
+    subCategory: "Square Limited",
+    merchant: "Square Limited",
+    catStatus: "Manual",
+    type: "Credits Only",
+  },
+  {
+    transactionID: "2",
+    date: "2023-03-07",
+    description: "Square Payments TTTTT",
+    amount: "11111.00",
+    category: "Payments Processor",
+    subCategory: "Square Limited",
+    merchant: "Square Limited",
+    catStatus: "Automatic",
+    type: "Debits Only",
+  },
+  {
+    transactionID: "3",
+    date: "2023-05-04",
+    description: "Square Payments BBBBDDDD",
+    amount: "14555.00",
+    category: "Payments Processor",
+    subCategory: "Square Limited",
+    merchant: "Square Limited",
+    catStatus: "Automatic",
+    type: "Debits Only",
+  },
+  {
+    transactionID: "4",
+    date: "2023-06-09",
+    description: "Square Payments AAA",
+    amount: "41333.00",
+    category: "Square",
+    subCategory: "Square Limited",
+    merchant: "Square Limited",
+    catStatus: "Manual",
+    type: "Credits Only",
+  },
+  {
+    transactionID: "5",
+    date: "2023-09-11",
+    description: "Square Payments BBB",
+    amount: "17.00",
+    category: "Barclys Processor",
+    subCategory: "Square Limited",
+    merchant: "Square Limited",
+    catStatus: "Automatic",
+    type: "Debits Only",
+  },
+  {
+    transactionID: "6",
+    date: "2023-02-09",
+    description: "Square Payments SSS",
+    amount: "41333.00",
+    category: "Square",
+    subCategory: "Square Limited",
+    merchant: "Square Limited",
+    catStatus: "Manual",
+    type: "Credits Only",
+  },
+  {
+    transactionID: "7",
+    date: "2023-09-10",
+    description: "Square Payments 4332221",
+    amount: "17.00",
+    category: "Barclys Processor",
+    subCategory: "Square Limited",
+    merchant: "Square Limited",
+    catStatus: "Automatic",
+    type: "Credits Only",
+  },
+  {
+    transactionID: "8",
+    date: "2023-03-09",
+    description: "Square Payments 542222",
+    amount: "41333.00",
+    category: "Square",
+    subCategory: "Square Limited",
+    merchant: "Square Limited",
+    catStatus: "Manual",
+    type: "Credits Only",
+  },
+  {
+    transactionID: "9",
+    date: "2023-01-10",
+    description: "Square Payments 988888",
+    amount: "17.00",
+    category: "Barclys Processor",
+    subCategory: "Square Limited",
+    merchant: "Square Limited",
+    catStatus: "Automatic",
+    type: "Credits Only",
+  },
+];
+const formatDate = (dateString: string) => {
+  const options = { year: "2-digit", month: "short" };
+  return new Date(dateString).toLocaleDateString("en-US", options);
+};
+const getUniqueMonths = (data) => {
+  const monthsSet = new Set(
+    data.map((item) => formatDate(item.date))
+  );
+  return Array.from(monthsSet).sort((a, b) => new Date(`01-${a}`) - new Date(`01-${b}`)); // Sort by date
+};
 
 const columns: ColumnDef<Payment>[] = [
   {
@@ -71,8 +179,22 @@ const columns: ColumnDef<Payment>[] = [
   },
   {
     accessorKey: "date",
-    header: "Date",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("date")}</div>,
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Date
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const rawDate = row.getValue("date");
+      const formattedDate = formatDate(rawDate);
+      return <div className="capitalize">{formattedDate}</div>;
+    }
   },
   {
     accessorKey: "description",
@@ -230,162 +352,10 @@ export type Payment = {
   email: string;
 };
 
-//Data in USse
-const data: Payment[] = [
-  {
-    transactionID: "1",
-    date: "2023-09-06",
-    description: "Square Payments 9866767635234",
-    amount: "51678.00",
-    category: "Payments Processor",
-    subCategory: "Square Limited",
-    merchant: "Square Limited",
-    catStatus: "Manual",
-    type: "Credits Only",
-  },
-  {
-    transactionID: "2",
-    date: "2023-09-07",
-    description: "Square Payments TTTTT",
-    amount: "11111.00",
-    category: "Payments Processor",
-    subCategory: "Square Limited",
-    merchant: "Square Limited",
-    catStatus: "Automatic",
-    type: "Debits Only",
-  },
-  {
-    transactionID: "3",
-    date: "2023-09-08",
-    description: "Square Payments BBBBDDDD",
-    amount: "14555.00",
-    category: "Payments Processor",
-    subCategory: "Square Limited",
-    merchant: "Square Limited",
-    catStatus: "Automatic",
-    type: "Debits Only",
-  },
-  {
-    transactionID: "4",
-    date: "2023-09-09",
-    description: "Square Payments AAA",
-    amount: "41333.00",
-    category: "Square",
-    subCategory: "Square Limited",
-    merchant: "Square Limited",
-    catStatus: "Manual",
-    type: "Credits Only",
-  },
-  {
-    transactionID: "5",
-    date: "2023-09-10",
-    description: "Square Payments BBB",
-    amount: "17.00",
-    category: "Barclys Processor",
-    subCategory: "Square Limited",
-    merchant: "Square Limited",
-    catStatus: "Automatic",
-    type: "Debits Only",
-  },
-  {
-    transactionID: "6",
-    date: "2023-09-09",
-    description: "Square Payments SSS",
-    amount: "41333.00",
-    category: "Square",
-    subCategory: "Square Limited",
-    merchant: "Square Limited",
-    catStatus: "Manual",
-    type: "Credits Only",
-  },
-  {
-    transactionID: "7",
-    date: "2023-09-10",
-    description: "Square Payments 4332221",
-    amount: "17.00",
-    category: "Barclys Processor",
-    subCategory: "Square Limited",
-    merchant: "Square Limited",
-    catStatus: "Automatic",
-    type: "Credits Only",
-  },
-  {
-    transactionID: "8",
-    date: "2023-09-09",
-    description: "Square Payments 542222",
-    amount: "41333.00",
-    category: "Square",
-    subCategory: "Square Limited",
-    merchant: "Square Limited",
-    catStatus: "Manual",
-    type: "Credits Only",
-  },
-  {
-    transactionID: "9",
-    date: "2023-09-10",
-    description: "Square Payments 988888",
-    amount: "17.00",
-    category: "Barclys Processor",
-    subCategory: "Square Limited",
-    merchant: "Square Limited",
-    catStatus: "Automatic",
-    type: "Credits Only",
-  },
-];
+
 
 // my data
-const dummyData = [
-  {
-    transactionID: "1",
-    date: "2023-09-06",
-    description: "Square Payments 9866767635234",
-    amount: "£51,678.00",
-    category: "Payments Processor",
-    subCategory: "Square Limited",
-    merchant: "Square Limited",
-    catStatus: "Manual",
-  },
-  {
-    transactionID: "2",
-    date: "2023-09-07",
-    description: "Square Payments 1234435435234",
-    amount: "£11,111.00",
-    category: "Payments Processor",
-    subCategory: "Square Limited",
-    merchant: "Square Limited",
-    catStatus: "Automatic",
-  },
-  {
-    transactionID: "3",
-    date: "2023-09-08",
-    description: "Square Payments 1234345335234",
-    amount: "£14,555.00",
-    category: "Payments Processor",
-    subCategory: "Square Limited",
-    merchant: "Square Limited",
-    catStatus: "Automatic",
-  },
-  {
-    transactionID: "4",
-    date: "2023-09-09",
-    description: "Square Payments 6666645234",
-    amount: "£41,333.00",
-    category: "Payments Processor",
-    subCategory: "Square Limited",
-    merchant: "Square Limited",
-    catStatus: "Manual",
-  },
-  {
-    transactionID: "5",
-    date: "2023-09-10",
-    description: "Square Payments 88885234",
-    amount: "£17.00",
-    category: "Payments Processor",
-    subCategory: "Square Limited",
-    merchant: "Square Limited",
-    catStatus: "Automatic",
-  },
-];
+
 
 // These function are moved to utils
 // Transaction, aggregateData, filterData
@@ -565,6 +535,7 @@ const data3: Transaction[] = [
   },
 ];
 export default function Home() {
+  
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -834,6 +805,7 @@ export default function Home() {
                 )}
               </TableBody>
             </Table>
+            
           </div>
           <div className="flex items-center justify-end space-x-2 py-4">
             <div className="flex-1 text-sm text-muted-foreground">
