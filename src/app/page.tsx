@@ -521,7 +521,7 @@ export default function Home() {
           </div>
           <Separator className="my-4" />
         </div>
-        <div className="flex items-center gap-3.5  p-10">
+        <div className="flex items-center gap-3.5 dark:bg-#DE6DA3 p-10">
           <div className="p-4">
             {" "}
             <Label htmlFor="">Contains</Label>
