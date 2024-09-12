@@ -1,5 +1,5 @@
 "use client";
-import {  Moon, Sun } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
 import {
@@ -89,7 +89,7 @@ const data = [
   },
   {
     transactionID: "5",
-    date: "2023-09-11",
+    date: "2024-09-11",
     description: "Square Payments BBB",
     amount: "17.00",
     category: "Barclys Processor",
@@ -100,7 +100,7 @@ const data = [
   },
   {
     transactionID: "6",
-    date: "2023-02-09",
+    date: "2024-02-09",
     description: "Square Payments SSS",
     amount: "41333.00",
     category: "Square",
@@ -111,7 +111,7 @@ const data = [
   },
   {
     transactionID: "7",
-    date: "2023-09-10",
+    date: "2023-02-10",
     description: "Square Payments 4332221",
     amount: "17.00",
     category: "Barclys Processor",
@@ -122,7 +122,7 @@ const data = [
   },
   {
     transactionID: "8",
-    date: "2023-03-09",
+    date: "2023-01-09",
     description: "Square Payments 542222",
     amount: "41333.00",
     category: "Square",
@@ -142,8 +142,29 @@ const data = [
     catStatus: "Automatic",
     type: "Credits Only",
   },
+  {
+    transactionID: "10",
+    date: "2023-06-10",
+    description: "Square Payments 988888",
+    amount: "122227.00",
+    category: "Barclys Processor",
+    subCategory: "Square Limited",
+    merchant: "Square Limited",
+    catStatus: "Automatic",
+    type: "Debits Only",
+  },
+  {
+    transactionID: "11",
+    date: "2024-01-10",
+    description: "Square Payments 988888",
+    amount: "53112223.00",
+    category: "Barclys Processor",
+    subCategory: "Square Limited",
+    merchant: "Barclys",
+    catStatus: "Automatic",
+    type: "Credits Only",
+  },
 ];
-
 
 const columns: ColumnDef<Payment>[] = [
   {
@@ -181,9 +202,8 @@ const columns: ColumnDef<Payment>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("date")}</div>
-    ),
+    
+    cell: ({ row }) => <div className="lowercase">{row.getValue("date")}</div>,
   },
   {
     accessorKey: "description",
@@ -341,28 +361,26 @@ export type Payment = {
   email: string;
 };
 
-
-
 // my data
-
 
 // These function are moved to utils
 // Transaction, aggregateData, filterData
 // Main component
 const formatDate = (dateString: string) => {
   const options = { year: "2-digit", month: "short" };
-  return new Date(dateString).toLocaleDateString("en-UK", options);
+  return new Date(dateString).toLocaleDateString("en-US", options);
 };
 
 // Extract unique months and years from the data
-const getUniqueMonths = (data: typeof data) => {
-  const monthsSet = new Set(
-    data.map((item) => formatDate(item.date))
-  );
-  return Array.from(monthsSet).sort((a, b) => new Date(`01-${a}`) - new Date(`01-${b}`)); // Sort by date
-};
-  // Extract unique months and years from the data
 
+// Extract unique months and years from the data
+// Extract unique months and years from the data
+const getUniqueMonths = (data: typeof data) => {
+  const monthsSet = new Set(data.map((item) => formatDate(item.date)));
+  return Array.from(monthsSet).sort(
+    (a, b) => new Date(`01-${a}`) - new Date(`01-${b}`)
+  ); // Sort by date
+};
 
 export default function Home() {
   const uniqueMonths = getUniqueMonths(data);
@@ -442,9 +460,13 @@ export default function Home() {
                   ?.setFilterValue(value === "all" ? null : value)
               }
             >
-              <ToggleGroupItem value="Credits Only">Credits Only</ToggleGroupItem>
+              <ToggleGroupItem value="Credits Only">
+                Credits Only
+              </ToggleGroupItem>
               <ToggleGroupItem value="Debits Only">Debits Only</ToggleGroupItem>
-              <ToggleGroupItem defaultChecked value="all">All Transactions</ToggleGroupItem>
+              <ToggleGroupItem defaultChecked value="all">
+                All Transactions
+              </ToggleGroupItem>
             </ToggleGroup>
           </div>
           <div>
@@ -522,14 +544,22 @@ export default function Home() {
         </div>
         <Separator className="my-4" />
         <div className="grid justify-items-start  p-10">
-        <ToggleGroup type="single">
-          {uniqueMonths.map((month, index) => (
-            <ToggleGroupItem key={index} value={month}>
-              {month}
-            </ToggleGroupItem>
-          ))}
-          <ToggleGroupItem value="all">All Transactions</ToggleGroupItem>
-        </ToggleGroup>
+          <ToggleGroup
+            type="single"
+            value={table.getColumn("date")?.getFilterValue() ?? ""}
+            onValueChange={(value) => {
+              table
+                .getColumn("date")
+                ?.setFilterValue(value === "all" ? null : value);
+            }}
+          >
+            {uniqueMonths.map((month, index) => (
+              <ToggleGroupItem key={index} value={month}>
+                {month}
+              </ToggleGroupItem>
+            ))}
+            <ToggleGroupItem value="all">All Transactions</ToggleGroupItem>
+          </ToggleGroup>
         </div>
         <div className="space-y-1">
           <h3 className="text-sm font-medium leading-none">
@@ -628,12 +658,13 @@ export default function Home() {
                 )}
               </TableBody>
             </Table>
-            
           </div>
           <div className="flex items-center justify-end space-x-2 py-4">
             <div className="flex-1 text-sm text-muted-foreground">
+              
               {table.getFilteredSelectedRowModel().rows.length} of{" "}
               {table.getFilteredRowModel().rows.length} row(s) selected.
+              
             </div>
             <div className="space-x-2">
               <Button
