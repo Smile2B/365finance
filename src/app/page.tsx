@@ -41,6 +41,7 @@ import {
 } from "@tanstack/react-table";
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useState } from 'react';
 //Data in USse
 const data = [
   {
@@ -383,6 +384,37 @@ const getUniqueMonths = (data: typeof data) => {
 };
 
 export default function Home() {
+  const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
+  const handleMonthSelection = (month: string) => {
+    setSelectedMonth(month); // Update the selected month
+
+    if (month === "all") {
+      table.getColumn("date")?.setFilterValue(null); // Reset the filter if "All Transactions" is selected
+    } else {
+      // Convert "Jan 23" to "2023-01"
+      const monthMap = {
+        Jan: "01",
+        Feb: "02",
+        Mar: "03",
+        Apr: "04",
+        May: "05",
+        Jun: "06",
+        Jul: "07",
+        Aug: "08",
+        Sep: "09",
+        Oct: "10",
+        Nov: "11",
+        Dec: "12",
+      };
+
+      // Split selectedMonth into month and year, e.g., "Jan 23"
+      const [monthName, year] = month.split(" ");
+      const formattedDate = `20${year}-${monthMap[monthName]}`; // e.g., "2023-01"
+
+      // Set the filter to match the formatted "YYYY-MM" string
+      table.getColumn("date")?.setFilterValue(formattedDate);
+    }
+  };
   const uniqueMonths = getUniqueMonths(data);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -544,14 +576,12 @@ export default function Home() {
         </div>
         <Separator className="my-4" />
         <div className="grid justify-items-start  p-10">
-          <ToggleGroup
+          
+          <ToggleGroup 
             type="single"
-            value={table.getColumn("date")?.getFilterValue() ?? ""}
-            onValueChange={(value) => {
-              table
-                .getColumn("date")
-                ?.setFilterValue(value === "all" ? null : value);
-            }}
+            value={selectedMonth ?? ""} // Pass the selected month value to the toggle group
+            onValueChange={handleMonthSelection} // Handle month selection
+  
           >
             {uniqueMonths.map((month, index) => (
               <ToggleGroupItem key={index} value={month}>
