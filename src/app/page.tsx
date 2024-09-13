@@ -42,7 +42,9 @@ import {
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from 'react';
-//Data in USse
+
+
+//Dataset in Use
 const data = [
   {
     transactionID: "1",
@@ -166,7 +168,18 @@ const data = [
     type: "Credits Only",
   },
 ];
-
+type DataItem = {
+  transactionID: string;
+  date: string;
+  description: string;
+  amount: string;
+  category: string;
+  subCategory: string;
+  merchant: string;
+  catStatus: string;
+  type: string;
+};
+//Table Setting
 const columns: ColumnDef<Payment>[] = [
   {
     id: "select",
@@ -340,7 +353,7 @@ const columns: ColumnDef<Payment>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
+              onClick={() => navigator.clipboard.writeText(payment.transactionID)}
             >
               Copy customer ID
             </DropdownMenuItem>
@@ -354,36 +367,48 @@ const columns: ColumnDef<Payment>[] = [
   },
 ];
 
-export type Payment = {
-  id: string;
-  amount: number;
+
+type Payment = {
+  transactionID: string;
+  date: string;
+  description: string;
+  amount: string;
+  category: string;
+  subCategory: string;
+  merchant: string;
+  catStatus: string;
   type: string;
-
-  email: string;
 };
-
 // my data
 
-// These function are moved to utils
-// Transaction, aggregateData, filterData
-// Main component
-const formatDate = (dateString: string) => {
-  const options = { year: "2-digit", month: "short" };
-  return new Date(dateString).toLocaleDateString("en-US", options);
-};
 
-// Extract unique months and years from the data
 
-// Extract unique months and years from the data
-// Extract unique months and years from the data
-const getUniqueMonths = (data: typeof data) => {
-  const monthsSet = new Set(data.map((item) => formatDate(item.date)));
-  return Array.from(monthsSet).sort(
-    (a, b) => new Date(`01-${a}`) - new Date(`01-${b}`)
-  ); // Sort by date
-};
+
+
+
+
 
 export default function Home() {
+  const { setTheme } = useTheme();
+    // Change the Date Format for Toggle Group show
+    const formatDate = (dateString: string) => {
+      const options: Intl.DateTimeFormatOptions = { year: "2-digit", month: "short" };
+      return new Date(dateString).toLocaleDateString("en-US", options);
+  };
+  // Extract unique months and years from the data
+
+  const getUniqueMonths = (data: DataItem[]) => {
+    const monthsSet = new Set(data.map((item) => formatDate(item.date)));
+    
+    // Sorting by date
+    return Array.from(monthsSet).sort((a, b) => {
+        const dateA = new Date(`01-${a}`).getTime();
+        const dateB = new Date(`01-${b}`).getTime();
+        return dateA - dateB;
+    });
+};
+const uniqueMonths = getUniqueMonths(data);
+
   const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
   const handleMonthSelection = (month: string) => {
     setSelectedMonth(month); // Update the selected month
@@ -405,17 +430,17 @@ export default function Home() {
         Oct: "10",
         Nov: "11",
         Dec: "12",
-      };
+    } as const;
 
       // Split selectedMonth into month and year, e.g., "Jan 23"
-      const [monthName, year] = month.split(" ");
+      const [monthName, year] = month.split(" ") as [keyof typeof monthMap, string];
       const formattedDate = `20${year}-${monthMap[monthName]}`; // e.g., "2023-01"
 
       // Set the filter to match the formatted "YYYY-MM" string
       table.getColumn("date")?.setFilterValue(formattedDate);
     }
   };
-  const uniqueMonths = getUniqueMonths(data);
+  
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -424,7 +449,7 @@ export default function Home() {
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
-  const { setTheme } = useTheme();
+
 
   const table = useReactTable({
     data,
@@ -598,7 +623,6 @@ export default function Home() {
         </div>
         <Separator className="my-4" />
 
-        <Separator className="my-4" />
 
         <div className="w-full">
           <div className="flex items-center py-4">
